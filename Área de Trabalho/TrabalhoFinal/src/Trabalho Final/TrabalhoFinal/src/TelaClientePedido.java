@@ -2,6 +2,7 @@
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.List;
+import javax.swing.table.DefaultTableModel;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -14,6 +15,26 @@ import java.util.List;
  * @author mlcab
  */
 public class TelaClientePedido extends javax.swing.JFrame {
+    
+    
+    public void loadTableItens(){
+        
+     int j;
+     
+        String tipoPizza = (String) comboTipoPizza.getSelectedItem();
+        double cm2 = Double.parseDouble(txtPrecocm2.getText());
+        if(tipoPizza.equals("Simples")){
+            precoSimples = cm2;
+            
+        }else if(tipoPizza.equals("Especial")){
+            precoEspecial = cm2;
+        }else{
+            precoPremium = cm2;
+        }
+     
+    
+    }
+    
     private final TabelaCliente tc = new TabelaCliente();
     private final List<Cliente> listaDeClientes = new ArrayList();
     private List<Cliente> listaPorFiltro = new ArrayList();
@@ -25,19 +46,24 @@ public class TelaClientePedido extends javax.swing.JFrame {
     private double precoPremium = 25.00;
     private final List<Pedido> listaDePedidos = new ArrayList();
     private final List<ItemPedido> itemLinha = new ArrayList();
-    //private final List<ItemPedido> itensPedido = new ArrayList();
+   
+    
+    
+    
+    
     
     public TelaClientePedido() {
         initComponents();
+        
         comboForma.addItem("Quadrado");
         comboForma.addItem("Triangular");
         comboForma.addItem("Circular");
         comboPedidoPizza.addItem("Simples");
         comboPedidoPizza.addItem("Especial");
         comboPedidoPizza.addItem("Premium");
-        comboMaterial.addItem("Simples");
-        comboMaterial.addItem("Especial");
-        comboMaterial.addItem("Premium");
+        comboTipoPizza.addItem("Simples");
+        comboTipoPizza.addItem("Especial");
+        comboTipoPizza.addItem("Premium");
         this.setLocationRelativeTo(null);
     }
 
@@ -51,6 +77,14 @@ public class TelaClientePedido extends javax.swing.JFrame {
     private void initComponents() {
 
         jTabbedPane1 = new javax.swing.JTabbedPane();
+        jPanel3 = new javax.swing.JPanel();
+        labelTipo = new javax.swing.JLabel();
+        comboTipoPizza = new javax.swing.JComboBox<>();
+        labelPrecoCm2 = new javax.swing.JLabel();
+        txtPrecocm2 = new javax.swing.JTextField();
+        atualizaPreco = new javax.swing.JButton();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        tabelaPreco = new javax.swing.JTable();
         jPanel1 = new javax.swing.JPanel();
         labelNome = new javax.swing.JLabel();
         txtNome = new javax.swing.JTextField();
@@ -95,15 +129,116 @@ public class TelaClientePedido extends javax.swing.JFrame {
         excluirItem = new javax.swing.JButton();
         inserirItem = new javax.swing.JButton();
         txtPedidoTelefone = new javax.swing.JFormattedTextField();
-        jPanel3 = new javax.swing.JPanel();
-        labelTipo = new javax.swing.JLabel();
-        comboMaterial = new javax.swing.JComboBox<>();
-        labelPrecoCm2 = new javax.swing.JLabel();
-        txtPrecocm2 = new javax.swing.JTextField();
-        atualizaPreco = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
+
+        labelTipo.setText("Tipo da Pizza :");
+
+        comboTipoPizza.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                comboTipoPizzaActionPerformed(evt);
+            }
+        });
+
+        labelPrecoCm2.setText("Preço do cm² :");
+
+        txtPrecocm2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtPrecocm2ActionPerformed(evt);
+            }
+        });
+
+        atualizaPreco.setText("Atualizar");
+        atualizaPreco.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                atualizaPrecoMouseClicked(evt);
+            }
+        });
+        atualizaPreco.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                atualizaPrecoActionPerformed(evt);
+            }
+        });
+
+        tabelaPreco.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null},
+                {null, null},
+                {null, null}
+            },
+            new String [] {
+                " Tipo da Pizza :", " Preço (cm²) :"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.Double.class, java.lang.Double.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false, false
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        tabelaPreco.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tabelaPrecoMouseClicked(evt);
+            }
+        });
+        jScrollPane3.setViewportView(tabelaPreco);
+        if (tabelaPreco.getColumnModel().getColumnCount() > 0) {
+            tabelaPreco.getColumnModel().getColumn(0).setHeaderValue(" Tipo da Pizza :");
+            tabelaPreco.getColumnModel().getColumn(1).setHeaderValue(" Preço (cm²) :");
+        }
+
+        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
+        jPanel3.setLayout(jPanel3Layout);
+        jPanel3Layout.setHorizontalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(labelPrecoCm2)
+                            .addComponent(labelTipo))
+                        .addGap(40, 40, 40)
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(txtPrecocm2, javax.swing.GroupLayout.DEFAULT_SIZE, 216, Short.MAX_VALUE)
+                            .addComponent(comboTipoPizza, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addGap(181, 181, 181)
+                        .addComponent(atualizaPreco))
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 610, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(82, Short.MAX_VALUE))
+        );
+        jPanel3Layout.setVerticalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addGap(17, 17, 17)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(labelTipo)
+                    .addComponent(comboTipoPizza, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(labelPrecoCm2)
+                    .addComponent(txtPrecocm2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(30, 30, 30)
+                .addComponent(atualizaPreco)
+                .addGap(36, 36, 36)
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(469, Short.MAX_VALUE))
+        );
+
+        jTabbedPane1.addTab("Valor Pizzas", jPanel3);
 
         labelNome.setText("Nome");
 
@@ -115,6 +250,11 @@ public class TelaClientePedido extends javax.swing.JFrame {
         incluirCliente.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 incluirClienteMouseClicked(evt);
+            }
+        });
+        incluirCliente.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                incluirClienteActionPerformed(evt);
             }
         });
 
@@ -214,7 +354,7 @@ public class TelaClientePedido extends javax.swing.JFrame {
                         .addComponent(excluirCliente)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 314, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(57, Short.MAX_VALUE))
+                .addContainerGap(234, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("Clientes", jPanel1);
@@ -467,58 +607,13 @@ public class TelaClientePedido extends javax.swing.JFrame {
 
         jTabbedPane1.addTab("Pedidos ", jPanel2);
 
-        labelTipo.setText("Tipo Pizza :");
-
-        labelPrecoCm2.setText("Preço do cm² :");
-
-        atualizaPreco.setText("Atualizar");
-        atualizaPreco.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                atualizaPrecoMouseClicked(evt);
-            }
-        });
-
-        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
-        jPanel3.setLayout(jPanel3Layout);
-        jPanel3Layout.setHorizontalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel3Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(atualizaPreco)
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(labelPrecoCm2)
-                            .addComponent(labelTipo))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(comboMaterial, 0, 216, Short.MAX_VALUE)
-                            .addComponent(txtPrecocm2))))
-                .addContainerGap(366, Short.MAX_VALUE))
-        );
-        jPanel3Layout.setVerticalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel3Layout.createSequentialGroup()
-                .addGap(17, 17, 17)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(labelTipo)
-                    .addComponent(comboMaterial, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(labelPrecoCm2)
-                    .addComponent(txtPrecocm2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addComponent(atualizaPreco)
-                .addContainerGap(603, Short.MAX_VALUE))
-        );
-
-        jTabbedPane1.addTab("Valor Pizzas", jPanel3);
-
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 708, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 708, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(49, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -540,6 +635,10 @@ public class TelaClientePedido extends javax.swing.JFrame {
             Cliente cliente = new Cliente(-1L,nome,sobrenome,telefone);
             listaDeClientes.add(cliente);
             tc.adicionaCliente(cliente);
+            
+            txtNome.setText("");
+            txtSobrenome.setText("");
+            txtTelefone.setText("");
         }
     }//GEN-LAST:event_incluirClienteMouseClicked
 
@@ -557,7 +656,9 @@ public class TelaClientePedido extends javax.swing.JFrame {
                     listaDePedidos.get(i).setTelefoneCliente(txtTelefone.getText());
                 }
             }
-            
+            txtNome.setText("");
+            txtSobrenome.setText("");
+            txtTelefone.setText("");
         }
     }//GEN-LAST:event_atualizarClienteMouseClicked
 
@@ -576,17 +677,20 @@ public class TelaClientePedido extends javax.swing.JFrame {
         int i;
         listaPorFiltro = new ArrayList();
          for(i = 0; i < listaDeClientes.size(); i++){
-           if(listaDeClientes.get(i).getSobrenome().equals(txtSobrenome.getText())){
+           if(listaDeClientes.get(i).getTelefone().equals(txtTelefone.getText())){
                listaPorFiltro.add(listaDeClientes.get(i));
            }
         }
-         if(txtSobrenome.getText().equals("")){
+         if(txtTelefone.getText().equals("")){
              tc.atualizarTabela(listaDeClientes);
+             
          }else{
              tc.atualizarTabela(listaPorFiltro);
          }
     }//GEN-LAST:event_listarClienteMouseClicked
 
+    
+    
     private void excluirClienteMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_excluirClienteMouseClicked
         int[] linhasSelecionadas = tableCliente.getSelectedRows();
         List<Cliente> listaExcluir = new ArrayList();
@@ -737,9 +841,6 @@ public class TelaClientePedido extends javax.swing.JFrame {
                         }
                     }
                 }
-                /*String mat = listaDePedidos.get(listaDePedidos.size() - 1).getItens().get(listaDePedidos.get(listaDePedidos.size() - 1).getItens().size() - 1).getMaterial();
-                System.out.println(mat);*/
-                //System.out.println(listaDePedidos.get(listaDePedidos.size() - 1).getId() + " " + listaDePedidos.get(listaDePedidos.size() - 1).getCpfCliente() + "\t" + listaDePedidos.get(listaDePedidos.size() - 1).getValorTotal());
             }
         }
     }//GEN-LAST:event_inserirItemMouseClicked
@@ -753,7 +854,8 @@ public class TelaClientePedido extends javax.swing.JFrame {
         for (i = 0; i < linhasSelecionadas.length; i++) {
             ItemPedido ip = tp.getItemPedido(linhasSelecionadas[i]);
             listaExcluirPedido.add(ip);
-
+      
+           
         }
         for(ItemPedido ip:listaExcluirPedido){
             listaDeItens.remove(ip);
@@ -775,8 +877,10 @@ public class TelaClientePedido extends javax.swing.JFrame {
             if(forma.equals(alteraPedido.getForma()) && tipoPizza.equals(alteraPedido.getTipoPizza()) && tam.equals(alteraPedido.getTamanho()) && p == alteraPedido.getPrecoItem()){
                 listaDePedidos.get(i).getItens().remove(linha);
             }
+             
         }
         System.out.println(listaDePedidos.get(listaDePedidos.size() - 1).getId() + " " + listaDePedidos.get(listaDePedidos.size() - 1).getTelefoneCliente() + "\t" + listaDePedidos.get(listaDePedidos.size() - 1).getValorTotal());
+           
     }//GEN-LAST:event_excluirItemMouseClicked
 
     private void alterarItemMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_alterarItemMouseClicked
@@ -850,25 +954,9 @@ public class TelaClientePedido extends javax.swing.JFrame {
         itemLinha.add(teste);
     }//GEN-LAST:event_tablePedidoMouseClicked
 
-    private void atualizaPrecoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_atualizaPrecoMouseClicked
-        int i;
-        String tipoPizza = (String) comboMaterial.getSelectedItem();
-        double cm2 = Double.parseDouble(txtPrecocm2.getText());
-        if(tipoPizza.equals("Simples")){
-            precoSimples = cm2;
-        }else if(tipoPizza.equals("Especial")){
-            precoEspecial = cm2;
-        }else{
-            precoPremium = cm2;
-        }
-        for(i = 0; i < listaDeItens.size(); i++){
-            if(listaDeItens.get(i).getTipoPizza().equals(tipoPizza)){
-                ItemPedido ip = listaDeItens.get(i);
-                ip.atualizaPrecos(cm2);
-            }
-        }
-    }//GEN-LAST:event_atualizaPrecoMouseClicked
+     
 
+    
     private void txtPedidoL1KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPedidoL1KeyReleased
         if(((txtPedidoL1.getText().length() >= 0) || evt.getKeyCode() == KeyEvent.VK_BACK_SPACE) && !txtTamanho.getText().equals("")){
             String forma = (String) comboForma.getSelectedItem();
@@ -911,6 +999,67 @@ public class TelaClientePedido extends javax.swing.JFrame {
     private void txtPedidoL2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtPedidoL2ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtPedidoL2ActionPerformed
+
+    private void incluirClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_incluirClienteActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_incluirClienteActionPerformed
+
+    private void atualizaPrecoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_atualizaPrecoActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_atualizaPrecoActionPerformed
+
+    private void atualizaPrecoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_atualizaPrecoMouseClicked
+
+        int i;
+
+        String tipoPizza = (String) comboTipoPizza.getSelectedItem();
+        double cm2 = Double.parseDouble(txtPrecocm2.getText());
+        if(tipoPizza.equals("Simples")){
+            precoSimples = cm2;
+
+        }else if(tipoPizza.equals("Especial")){
+            precoEspecial = cm2;
+        }else{
+            precoPremium = cm2;
+        }
+
+        for(i = 0; i < listaDeItens.size(); i++){
+            if(listaDeItens.get(i).getTipoPizza().equals(tipoPizza)){
+                ItemPedido ip = listaDeItens.get(i+1);
+                ip.atualizaPrecos(cm2);
+
+            }
+        }
+
+        DefaultTableModel modelo = new DefaultTableModel(new Object[]{"Tipo da Pizza", "Preço(cm²)"}, 0);
+        for (int j = 0; j < listaDeItens.size(); j++) {
+            modelo.addRow(new Object[]{listaDeItens.get(i).getTipoPizza(), listaDeItens.get(i).getPrecoItem()});
+        }
+
+        modelo.addRow(new Object[]{tipoPizza,cm2});
+        tabelaPreco.setModel(modelo);
+
+        tabelaPreco.getColumnModel().getColumn(0).setPreferredWidth(50);
+        tabelaPreco.getColumnModel().getColumn(1).setPreferredWidth(200);
+
+    }//GEN-LAST:event_atualizaPrecoMouseClicked
+
+    private void txtPrecocm2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtPrecocm2ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtPrecocm2ActionPerformed
+
+    private void comboTipoPizzaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboTipoPizzaActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_comboTipoPizzaActionPerformed
+
+    private void tabelaPrecoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tabelaPrecoMouseClicked
+        
+        
+        
+        
+        
+        
+    }//GEN-LAST:event_tabelaPrecoMouseClicked
 
     public void calculaLados(){
         String f = (String) comboForma.getSelectedItem();
@@ -1004,8 +1153,8 @@ public class TelaClientePedido extends javax.swing.JFrame {
     private javax.swing.JButton atualizaPreco;
     private javax.swing.JButton atualizarCliente;
     private javax.swing.JComboBox<String> comboForma;
-    private javax.swing.JComboBox<String> comboMaterial;
     private javax.swing.JComboBox<String> comboPedidoPizza;
+    private javax.swing.JComboBox<String> comboTipoPizza;
     private javax.swing.JButton excluirCliente;
     private javax.swing.JButton excluirItem;
     private javax.swing.JButton incluirCliente;
@@ -1016,6 +1165,7 @@ public class TelaClientePedido extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator2;
     private javax.swing.JSeparator jSeparator3;
@@ -1036,6 +1186,7 @@ public class TelaClientePedido extends javax.swing.JFrame {
     private javax.swing.JLabel pedidoTipoPizza;
     private javax.swing.JButton pesquisar;
     private javax.swing.JTextField precoTotal;
+    private javax.swing.JTable tabelaPreco;
     private javax.swing.JTable tableCliente;
     private javax.swing.JTable tablePedido;
     private javax.swing.JLabel tituloCliente;

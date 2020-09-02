@@ -3,6 +3,7 @@ import java.util.List;
 import javax.swing.table.AbstractTableModel;
 
 public class TabelaPedido extends AbstractTableModel{
+    private Cliente cliente;
     private String[] colunas = new String[]{"Forma", "Tipo da Pizza", "Tamanho(cm²)", "Preço"};
     private List<ItemPedido> lista = new ArrayList();
     private List<Pedido> listaPedido = new ArrayList();
@@ -28,6 +29,7 @@ public class TabelaPedido extends AbstractTableModel{
     public Object getValueAt(int rowIndex, int columnIndex) {
         ItemPedido customer = lista.get(rowIndex);
         switch (columnIndex) {
+           
             case 0: return customer.getForma();
             case 1: return customer.getTipoPizza();
             case 2: return customer.getTamanho();

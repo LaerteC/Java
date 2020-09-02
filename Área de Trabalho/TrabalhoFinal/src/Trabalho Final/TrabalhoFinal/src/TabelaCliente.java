@@ -21,13 +21,7 @@ public class TabelaCliente extends AbstractTableModel{
         return this.colunas[index];
     }
 
-    /*@Override
-    public boolean isCellEditable(int row, int column) {
-        return false;
-        //if(column==0)
-        //    return false;
-        //return true;
-    }*/
+   
 
     @Override
     public Object getValueAt(int rowIndex, int columnIndex) {
@@ -57,6 +51,7 @@ public class TabelaCliente extends AbstractTableModel{
         this.lista = new ArrayList();
         this.lista.addAll(lista);
         this.fireTableDataChanged();
+     
     }
 
     public Cliente getCliente(int linha){
